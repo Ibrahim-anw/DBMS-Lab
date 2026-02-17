@@ -1,0 +1,99 @@
+Setting environment for using XAMPP for Windows.
+Asus@LAPTOP-0ISJDISF c:\xampp
+# mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 11
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| ibraim_database    |
+| information_schema |
+| mysql              |
+| performance_schema |
++--------------------+
+4 rows in set (0.001 sec)
+
+MariaDB [(none)]> create ibrahim_database;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'ibrahim_database' at line 1
+MariaDB [(none)]> create database ibrahim_database;
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [(none)]> use ibrahim_database;
+Database changed
+MariaDB [ibrahim_database]> create table lab_grades (
+    -> student_id char(4),
+    -> name varshar(30),
+    -> major char(3),
+    -> section char(1),
+    -> days_present int,
+    -> project_marks double,
+    -> cgpa decimal(3,2),
+    -> submission_date date
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '(30),
+major char(3),
+section char(1),
+days_present int,
+project_marks double,...' at line 3
+MariaDB [ibrahim_database]> create table lab_grades (
+    -> student_id char(4),
+    -> name varchar(30),
+    -> major char(3),
+    -> section char(1),
+    -> days_present int,
+    -> project_marks double,
+    -> cgpa decimal(3,2),
+    -> submission_date date
+    -> );
+Query OK, 0 rows affected (0.010 sec)
+
+MariaDB [ibrahim_database]> show tables;
++----------------------------+
+| Tables_in_ibrahim_database |
++----------------------------+
+| lab_grades                 |
++----------------------------+
+1 row in set (0.001 sec)
+
+MariaDB [ibrahim_database]> describe lab_grades;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| student_id      | char(4)      | YES  |     | NULL    |       |
+| name            | varchar(30)  | YES  |     | NULL    |       |
+| major           | char(3)      | YES  |     | NULL    |       |
+| section         | char(1)      | YES  |     | NULL    |       |
+| days_present    | int(11)      | YES  |     | NULL    |       |
+| project_marks   | double       | YES  |     | NULL    |       |
+| cgpa            | decimal(3,2) | YES  |     | NULL    |       |
+| submission_date | date         | YES  |     | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+8 rows in set (0.021 sec)
+
+MariaDB [ibrahim_database]> INSERT INTO lab_grades (student_id, name, major, section, days_present, project_marks, cgpa, submission_date)
+    -> VALUES ('s001', 'Shaheen', 'CSE','1', 12, 18, 3.96, '2018-09-16'),('s002', 'Zishan', 'CS','1', 11, 17.5, 3.73, '2018-09-14'),('s003', 'Rafi', 'CS','1', 7, 12.5, 3.33, '2018-09-15'),('s004', 'Fahim', 'CSE','1', 12, 20, 4.00, '2018-09-15'),('s005', 'Inan', 'CS','2', 13, 19, 3.92, '2018-09-13'),('s006', 'Rahat', 'CS','1', 12, 18, 3.90, '2018-09-16');
+Query OK, 6 rows affected (0.004 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+MariaDB [ibrahim_database]> select * from lab_grades;
++------------+---------+-------+---------+--------------+---------------+------+-----------------+
+| student_id | name    | major | section | days_present | project_marks | cgpa | submission_date |
++------------+---------+-------+---------+--------------+---------------+------+-----------------+
+| s001       | Shaheen | CSE   | 1       |           12 |            18 | 3.96 | 2018-09-16      |
+| s002       | Zishan  | CS    | 1       |           11 |          17.5 | 3.73 | 2018-09-14      |
+| s003       | Rafi    | CS    | 1       |            7 |          12.5 | 3.33 | 2018-09-15      |
+| s004       | Fahim   | CSE   | 1       |           12 |            20 | 4.00 | 2018-09-15      |
+| s005       | Inan    | CS    | 2       |           13 |            19 | 3.92 | 2018-09-13      |
+| s006       | Rahat   | CS    | 1       |           12 |            18 | 3.90 | 2018-09-16      |
++------------+---------+-------+---------+--------------+---------------+------+-----------------+
+6 rows in set (0.001 sec)
+
+MariaDB [ibrahim_database]> 
