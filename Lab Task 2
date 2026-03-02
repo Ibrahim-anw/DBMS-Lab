@@ -1,0 +1,256 @@
+Setting environment for using XAMPP for Windows.
+Asus@LAPTOP-0ISJDISF c:\xampp
+# mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 16
+Server version: 10.4.32-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| ibrahim_database   |
+| ibraim_database    |
+| information_schema |
+| mysql              |
+| performance_schema |
++--------------------+
+5 rows in set (0.001 sec)
+
+MariaDB [(none)]> use ibrahim_database;
+Database changed
+MariaDB [ibrahim_database]> show tables;
++----------------------------+
+| Tables_in_ibrahim_database |
++----------------------------+
+| lab_grades                 |
++----------------------------+
+1 row in set (0.001 sec)
+
+MariaDB [ibrahim_database]> describe lab_grades;
++-----------------+--------------+------+-----+---------+-------+
+| Field           | Type         | Null | Key | Default | Extra |
++-----------------+--------------+------+-----+---------+-------+
+| student_id      | char(4)      | YES  |     | NULL    |       |
+| name            | varchar(30)  | YES  |     | NULL    |       |
+| major           | char(3)      | YES  |     | NULL    |       |
+| section         | char(1)      | YES  |     | NULL    |       |
+| days_present    | int(11)      | YES  |     | NULL    |       |
+| project_marks   | double       | YES  |     | NULL    |       |
+| cgpa            | decimal(3,2) | YES  |     | NULL    |       |
+| submission_date | date         | YES  |     | NULL    |       |
++-----------------+--------------+------+-----+---------+-------+
+8 rows in set (0.017 sec)
+
+MariaDB [ibrahim_database]> select * from lab_grades;
++------------+---------+-------+---------+--------------+---------------+------+-----------------+
+| student_id | name    | major | section | days_present | project_marks | cgpa | submission_date |
++------------+---------+-------+---------+--------------+---------------+------+-----------------+
+| s001       | Shaheen | CSE   | 1       |           12 |            18 | 3.96 | 2018-09-16      |
+| s002       | Zishan  | CS    | 1       |           11 |          17.5 | 3.73 | 2018-09-14      |
+| s003       | Rafi    | CS    | 1       |            7 |          12.5 | 3.33 | 2018-09-15      |
+| s004       | Fahim   | CSE   | 1       |           12 |            20 | 4.00 | 2018-09-15      |
+| s005       | Inan    | CS    | 2       |           13 |            19 | 3.92 | 2018-09-13      |
+| s006       | Rahat   | CS    | 1       |           12 |            18 | 3.90 | 2018-09-16      |
++------------+---------+-------+---------+--------------+---------------+------+-----------------+
+6 rows in set (0.000 sec)
+
+MariaDB [ibrahim_database]> ALTER TABLE Lab_Grades ADD Project_title CHAR(10);
+Query OK, 0 rows affected (0.009 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [ibrahim_database]> ALTER TABLE Lab_Grades MODIFY COLUMN Project_title
+    ->
+    -> VARCHAR(50);
+Query OK, 6 rows affected (0.043 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+MariaDB [ibrahim_database]> ALTER TABLE Lab_Grades DROP COLUMN Project_title;
+Query OK, 0 rows affected (0.009 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+MariaDB [ibrahim_database]> ALTER TABLE Lab_Grades RENAME COLUMN submission_date TO sub_date;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'COLUMN submission_date TO sub_date' at line 1
+MariaDB [ibrahim_database]> ALTER TABLE Lab_Grades CHANGE submission_date sub_date DATETIME;
+Query OK, 6 rows affected (0.044 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+MariaDB [ibrahim_database]> UPDATE Lab_Grades SET Major = 'CSE' WHERE Name = 'Zishan';
+Query OK, 1 row affected (0.005 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [ibrahim_database]> UPDATE Lab_Grades SET Name = 'Naheed', Project_marks = 16 WHERE Std_ID = 's004';
+ERROR 1054 (42S22): Unknown column 'Std_ID' in 'where clause'
+MariaDB [ibrahim_database]>  UPDATE Lab_Grades SET Name = 'Naheed', Project_marks = 16 WHERE Student_id = 's004';
+Query OK, 1 row affected (0.003 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [ibrahim_database]> DELETE FROM Lab_Grades WHERE Name = 'Rahat';
+Query OK, 1 row affected (0.004 sec)
+
+MariaDB [ibrahim_database]> DELETE FROM Lab_Grades WHERE Days_present < 8;
+Query OK, 1 row affected (0.003 sec)
+
+MariaDB [ibrahim_database]> SELECT * FROM Lab_Grades;
++------------+---------+-------+---------+--------------+---------------+------+---------------------+
+| student_id | name    | major | section | days_present | project_marks | cgpa | sub_date            |
++------------+---------+-------+---------+--------------+---------------+------+---------------------+
+| s001       | Shaheen | CSE   | 1       |           12 |            18 | 3.96 | 2018-09-16 00:00:00 |
+| s002       | Zishan  | CSE   | 1       |           11 |          17.5 | 3.73 | 2018-09-14 00:00:00 |
+| s004       | Naheed  | CSE   | 1       |           12 |            16 | 4.00 | 2018-09-15 00:00:00 |
+| s005       | Inan    | CS    | 2       |           13 |            19 | 3.92 | 2018-09-13 00:00:00 |
++------------+---------+-------+---------+--------------+---------------+------+---------------------+
+4 rows in set (0.000 sec)
+
+MariaDB [ibrahim_database]> SELECT Std_ID, Name, Project_marks FROM Lab_Grades;
+ERROR 1054 (42S22): Unknown column 'Std_ID' in 'field list'
+MariaDB [ibrahim_database]> SELECT student_id, Name, Project_marks FROM Lab_Grades;
++------------+---------+---------------+
+| student_id | Name    | Project_marks |
++------------+---------+---------------+
+| s001       | Shaheen |            18 |
+| s002       | Zishan  |          17.5 |
+| s004       | Naheed  |            16 |
+| s005       | Inan    |            19 |
++------------+---------+---------------+
+4 rows in set (0.001 sec)
+
+MariaDB [ibrahim_database]> SELECT Name, Project_marks + Days_present*5/12 AS Total_marks
+    ->
+    -> FROM Lab_Grades;
++---------+--------------+
+| Name    | Total_marks  |
++---------+--------------+
+| Shaheen |           23 |
+| Zishan  | 22.083333333 |
+| Naheed  |           21 |
+| Inan    | 24.416666666 |
++---------+--------------+
+4 rows in set (0.000 sec)
+
+MariaDB [ibrahim_database]> SELECT UPPER(Name), LOWER(Name) FROM Lab_Grades;
++-------------+-------------+
+| UPPER(Name) | LOWER(Name) |
++-------------+-------------+
+| SHAHEEN     | shaheen     |
+| ZISHAN      | zishan      |
+| NAHEED      | naheed      |
+| INAN        | inan        |
++-------------+-------------+
+4 rows in set (0.001 sec)
+
+MariaDB [ibrahim_database]> SELECT Major FROM Lab_Grades;
++-------+
+| Major |
++-------+
+| CSE   |
+| CSE   |
+| CSE   |
+| CS    |
++-------+
+4 rows in set (0.000 sec)
+
+MariaDB [ibrahim_database]>
+MariaDB [ibrahim_database]> &
+    ->
+    -> SELECT DISTINCT Major FROM Lab_Grades;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '&
+
+SELECT DISTINCT Major FROM Lab_Grades' at line 1
+MariaDB [ibrahim_database]> SELECT DISTINCT Major FROM Lab_Grades;
++-------+
+| Major |
++-------+
+| CSE   |
+| CS    |
++-------+
+2 rows in set (0.001 sec)
+
+MariaDB [ibrahim_database]> SELECT * FROM Lab_Grades ORDER BY Name;
++------------+---------+-------+---------+--------------+---------------+------+---------------------+
+| student_id | name    | major | section | days_present | project_marks | cgpa | sub_date            |
++------------+---------+-------+---------+--------------+---------------+------+---------------------+
+| s005       | Inan    | CS    | 2       |           13 |            19 | 3.92 | 2018-09-13 00:00:00 |
+| s004       | Naheed  | CSE   | 1       |           12 |            16 | 4.00 | 2018-09-15 00:00:00 |
+| s001       | Shaheen | CSE   | 1       |           12 |            18 | 3.96 | 2018-09-16 00:00:00 |
+| s002       | Zishan  | CSE   | 1       |           11 |          17.5 | 3.73 | 2018-09-14 00:00:00 |
++------------+---------+-------+---------+--------------+---------------+------+---------------------+
+4 rows in set (0.001 sec)
+
+MariaDB [ibrahim_database]> SELECT * FROM Lab_Grades ORDER BY Name DESC, Submission_date
+    ->
+    -> SELECT * FROM Lab_Grades ORDER BY Name DESC, Sub_date ASC;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'SELECT * FROM Lab_Grades ORDER BY Name DESC, Sub_date ASC' at line 3
+MariaDB [ibrahim_database]> SELECT * FROM Lab_Grades ORDER BY Name DESC, Sub_date ASC;
++------------+---------+-------+---------+--------------+---------------+------+---------------------+
+| student_id | name    | major | section | days_present | project_marks | cgpa | sub_date            |
++------------+---------+-------+---------+--------------+---------------+------+---------------------+
+| s002       | Zishan  | CSE   | 1       |           11 |          17.5 | 3.73 | 2018-09-14 00:00:00 |
+| s001       | Shaheen | CSE   | 1       |           12 |            18 | 3.96 | 2018-09-16 00:00:00 |
+| s004       | Naheed  | CSE   | 1       |           12 |            16 | 4.00 | 2018-09-15 00:00:00 |
+| s005       | Inan    | CS    | 2       |           13 |            19 | 3.92 | 2018-09-13 00:00:00 |
++------------+---------+-------+---------+--------------+---------------+------+---------------------+
+4 rows in set (0.001 sec)
+
+MariaDB [ibrahim_database]> SELECT Name, Days_present, Project_marks FROM Lab_Grades WHERE Project_marks > 17;
++---------+--------------+---------------+
+| Name    | Days_present | Project_marks |
++---------+--------------+---------------+
+| Shaheen |           12 |            18 |
+| Zishan  |           11 |          17.5 |
+| Inan    |           13 |            19 |
++---------+--------------+---------------+
+3 rows in set (0.001 sec)
+
+MariaDB [ibrahim_database]> SELECT Name, Project_marks FROM Lab_Grades WHERE Major = 'CSE';
++---------+---------------+
+| Name    | Project_marks |
++---------+---------------+
+| Shaheen |            18 |
+| Zishan  |          17.5 |
+| Naheed  |            16 |
++---------+---------------+
+3 rows in set (0.000 sec)
+
+MariaDB [ibrahim_database]> SELECT Name, Project_marks FROM Lab_Grades WHERE Project_marks BETWEEN 17 AND 19;
++---------+---------------+
+| Name    | Project_marks |
++---------+---------------+
+| Shaheen |            18 |
+| Zishan  |          17.5 |
+| Inan    |            19 |
++---------+---------------+
+3 rows in set (0.001 sec)
+
+MariaDB [ibrahim_database]> SELECT * FROM Lab_Grades WHERE Major IN ('CS', 'CSE');
++------------+---------+-------+---------+--------------+---------------+------+---------------------+
+| student_id | name    | major | section | days_present | project_marks | cgpa | sub_date            |
++------------+---------+-------+---------+--------------+---------------+------+---------------------+
+| s001       | Shaheen | CSE   | 1       |           12 |            18 | 3.96 | 2018-09-16 00:00:00 |
+| s002       | Zishan  | CSE   | 1       |           11 |          17.5 | 3.73 | 2018-09-14 00:00:00 |
+| s004       | Naheed  | CSE   | 1       |           12 |            16 | 4.00 | 2018-09-15 00:00:00 |
+| s005       | Inan    | CS    | 2       |           13 |            19 | 3.92 | 2018-09-13 00:00:00 |
++------------+---------+-------+---------+--------------+---------------+------+---------------------+
+4 rows in set (0.001 sec)
+
+MariaDB [ibrahim_database]> SELECT * FROM Lab_Grades WHERE Project_marks > 18 AND Sub_date BETWEEN '2018-09-01' AND '2018-09-31';
++------------+------+-------+---------+--------------+---------------+------+---------------------+
+| student_id | name | major | section | days_present | project_marks | cgpa | sub_date            |
++------------+------+-------+---------+--------------+---------------+------+---------------------+
+| s005       | Inan | CS    | 2       |           13 |            19 | 3.92 | 2018-09-13 00:00:00 |
++------------+------+-------+---------+--------------+---------------+------+---------------------+
+1 row in set (0.001 sec)
+
+MariaDB [ibrahim_database]> SELECT * FROM Lab_Grades WHERE Name LIKE 'a%';
+Empty set (0.000 sec)
+
+MariaDB [ibrahim_database]> SELECT * FROM Lab_Grades WHERE Name LIKE '%a%a%';
+Empty set (0.000 sec)
+
+MariaDB [ibrahim_database]> SELECT * FROM Lab_Grades WHERE Name LIKE 'a___';
+Empty set (0.000 sec)
